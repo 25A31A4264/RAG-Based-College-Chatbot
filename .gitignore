@@ -17,6 +17,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+scripts/vercel-deploy.mjs
 
 # SQLite Local Database files
 *.db
@@ -47,3 +48,5 @@ yarn-error.log*
 
 # IDE agent logs
 .system_generated/
+
+.vercel

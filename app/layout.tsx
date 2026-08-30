@@ -4,7 +4,10 @@ import { Providers } from "./providers";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
+const baseUrl = process.env.NEXTAUTH_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl.startsWith("http") ? baseUrl : `https://${baseUrl}`),
   title: "CollegeAI - RAG-Based Campus Information Assistant",
   description:
     "AI-powered college chatbot using Retrieval-Augmented Generation (RAG) to provide verified, grounded answers strictly from official college documents.",
