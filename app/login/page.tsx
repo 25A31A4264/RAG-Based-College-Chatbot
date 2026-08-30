@@ -59,14 +59,14 @@ function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md space-y-6">
+    <div className="w-full max-w-md space-y-5 sm:space-y-6">
       {/* Card */}
-      <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl space-y-6">
-        <div className="text-center space-y-2">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30">
-            <GraduationCap className="h-6 w-6" />
+      <div className="glass-panel rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-white/10 shadow-2xl space-y-5 sm:space-y-6">
+        <div className="text-center space-y-1.5 sm:space-y-2">
+          <div className="mx-auto flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30">
+            <GraduationCap className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Sign In to CollegeAI</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Sign In to CollegeAI</h1>
           <p className="text-xs text-slate-400">
             Access the campus chatbot and official document portal
           </p>
@@ -74,25 +74,25 @@ function LoginForm() {
 
         {/* Quick Demo Fillers */}
         <div className="space-y-2">
-          <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider text-center">
+          <div className="text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider text-center">
             Quick Demo Accounts
           </div>
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => handleQuickLogin("student@college.edu", "Student@123")}
-              className="flex items-center justify-center gap-1.5 p-2 rounded-xl border border-indigo-500/30 bg-indigo-600/10 text-indigo-300 hover:bg-indigo-600/20 text-xs font-medium transition"
+              className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl border border-indigo-500/30 bg-indigo-600/10 text-indigo-300 hover:bg-indigo-600/20 text-xs font-medium transition active:scale-95"
             >
               <User className="h-3.5 w-3.5" />
-              Student Demo
+              <span>Student Demo</span>
             </button>
             <button
               type="button"
               onClick={() => handleQuickLogin("admin@college.edu", "Admin@123")}
-              className="flex items-center justify-center gap-1.5 p-2 rounded-xl border border-purple-500/30 bg-purple-600/10 text-purple-300 hover:bg-purple-600/20 text-xs font-medium transition"
+              className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl border border-purple-500/30 bg-purple-600/10 text-purple-300 hover:bg-purple-600/20 text-xs font-medium transition active:scale-95"
             >
               <ShieldCheck className="h-3.5 w-3.5" />
-              Admin Demo
+              <span>Admin Demo</span>
             </button>
           </div>
         </div>
@@ -106,7 +106,7 @@ function LoginForm() {
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1.5">
               Email Address
@@ -119,7 +119,7 @@ function LoginForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="student@college.edu"
                 required
-                className="w-full rounded-xl border border-white/10 bg-slate-900/90 pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full rounded-xl border border-white/10 bg-slate-900/90 pl-10 pr-4 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
               />
             </div>
           </div>
@@ -134,7 +134,7 @@ function LoginForm() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full rounded-xl border border-white/10 bg-slate-900/90 pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full rounded-xl border border-white/10 bg-slate-900/90 pl-10 pr-4 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
               />
             </div>
           </div>
@@ -142,7 +142,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 py-3 text-xs font-semibold text-white shadow-lg shadow-indigo-600/30 transition"
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 py-3 text-xs sm:text-sm font-semibold text-white shadow-lg shadow-indigo-600/30 transition active:scale-95"
           >
             {isLoading ? (
               <>

@@ -105,17 +105,17 @@ export function DocumentTable({ documents, onRefresh }: DocumentTableProps) {
   };
 
   return (
-    <div className="glass-panel rounded-2xl p-6 border border-white/10 space-y-5">
+    <div className="glass-panel rounded-2xl p-4 sm:p-6 border border-white/10 space-y-4 sm:space-y-5">
       {/* Table Header & Filters */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5">
         <div>
-          <h3 className="text-base font-bold text-white">Document Knowledge Base</h3>
+          <h3 className="text-sm sm:text-base font-bold text-white">Document Knowledge Base</h3>
           <p className="text-xs text-slate-400">
             Official documents ingested and indexed into PostgreSQL pgvector
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 w-full sm:w-auto">
+        <div className="flex items-center gap-2 sm:gap-2.5 w-full sm:w-auto">
           {/* Search */}
           <div className="relative flex-1 sm:w-56">
             <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
@@ -130,7 +130,7 @@ export function DocumentTable({ documents, onRefresh }: DocumentTableProps) {
 
           <button
             onClick={onRefresh}
-            className="p-2 rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 transition"
+            className="p-2 rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 transition active:scale-95 shrink-0"
             title="Refresh list"
           >
             <RefreshCw className="h-3.5 w-3.5" />
@@ -144,18 +144,18 @@ export function DocumentTable({ documents, onRefresh }: DocumentTableProps) {
         </div>
       )}
 
-      {/* Table Container */}
-      <div className="overflow-x-auto rounded-xl border border-white/10">
-        <table className="w-full text-left text-xs">
+      {/* Desktop / Tablet Table View */}
+      <div className="overflow-x-auto rounded-xl border border-white/10 -mx-1 sm:mx-0">
+        <table className="w-full text-left text-xs min-w-[640px]">
           <thead className="bg-slate-900/90 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
             <tr>
-              <th className="px-4 py-3">Document</th>
-              <th className="px-4 py-3">Category</th>
-              <th className="px-4 py-3">Format & Size</th>
-              <th className="px-4 py-3">Chunks</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Ingested</th>
-              <th className="px-4 py-3 text-right">Actions</th>
+              <th className="px-3.5 sm:px-4 py-3">Document</th>
+              <th className="px-3 sm:px-4 py-3">Category</th>
+              <th className="px-3 sm:px-4 py-3">Format & Size</th>
+              <th className="px-3 sm:px-4 py-3">Chunks</th>
+              <th className="px-3 sm:px-4 py-3">Status</th>
+              <th className="px-3 sm:px-4 py-3">Ingested</th>
+              <th className="px-3 sm:px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5 bg-slate-950/40 text-slate-300">
@@ -168,33 +168,33 @@ export function DocumentTable({ documents, onRefresh }: DocumentTableProps) {
             ) : (
               filteredDocs.map((doc) => (
                 <tr key={doc.id} className="hover:bg-white/5 transition">
-                  <td className="px-4 py-3.5">
-                    <div className="flex items-center gap-2.5">
-                      <div className="p-2 rounded-lg bg-indigo-600/10 text-indigo-400 border border-indigo-500/20">
+                  <td className="px-3.5 sm:px-4 py-3.5">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="p-2 rounded-lg bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 shrink-0">
                         <FileText className="h-4 w-4" />
                       </div>
-                      <div>
-                        <div className="font-semibold text-white">{doc.title}</div>
-                        <div className="text-[11px] text-slate-500">{doc.fileName}</div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-white truncate max-w-[180px] sm:max-w-xs">{doc.title}</div>
+                        <div className="text-[11px] text-slate-500 truncate max-w-[180px] sm:max-w-xs">{doc.fileName}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3.5">
-                    <span className="rounded-md bg-indigo-500/10 px-2.5 py-1 text-[11px] font-medium text-indigo-300 border border-indigo-500/20">
+                  <td className="px-3 sm:px-4 py-3.5">
+                    <span className="rounded-md bg-indigo-500/10 px-2.5 py-1 text-[11px] font-medium text-indigo-300 border border-indigo-500/20 whitespace-nowrap">
                       {doc.category}
                     </span>
                   </td>
-                  <td className="px-4 py-3.5 text-slate-400">
+                  <td className="px-3 sm:px-4 py-3.5 text-slate-400 whitespace-nowrap">
                     <span className="font-mono text-slate-200">{doc.fileType}</span> •{" "}
                     {formatBytes(doc.fileSize)}
                   </td>
-                  <td className="px-4 py-3.5">
+                  <td className="px-3 sm:px-4 py-3.5 whitespace-nowrap">
                     <span className="flex items-center gap-1.5 font-mono text-slate-300">
-                      <Layers className="h-3.5 w-3.5 text-purple-400" />
+                      <Layers className="h-3.5 w-3.5 text-purple-400 shrink-0" />
                       {doc._count?.chunks || 0} chunks
                     </span>
                   </td>
-                  <td className="px-4 py-3.5">
+                  <td className="px-3 sm:px-4 py-3.5 whitespace-nowrap">
                     {doc.status === "READY" && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400 border border-emerald-500/20">
                         <CheckCircle className="h-3 w-3" /> Ready
@@ -219,15 +219,15 @@ export function DocumentTable({ documents, onRefresh }: DocumentTableProps) {
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-3.5 text-[11px] text-slate-500">
+                  <td className="px-3 sm:px-4 py-3.5 text-[11px] text-slate-500 whitespace-nowrap">
                     {formatDate(doc.createdAt)}
                   </td>
-                  <td className="px-4 py-3.5 text-right">
+                  <td className="px-3 sm:px-4 py-3.5 text-right whitespace-nowrap">
                     <div className="flex items-center justify-end gap-1.5">
                       <button
                         onClick={() => handleViewChunks(doc.id)}
                         disabled={loadingDocId === doc.id}
-                        className="p-1.5 rounded-lg border border-white/10 bg-white/5 text-slate-300 hover:text-purple-300 hover:bg-purple-500/10 transition"
+                        className="p-1.5 rounded-lg border border-white/10 bg-white/5 text-slate-300 hover:text-purple-300 hover:bg-purple-500/10 transition active:scale-95"
                         title="View Chunks"
                       >
                         <Eye className="h-3.5 w-3.5" />
@@ -235,14 +235,14 @@ export function DocumentTable({ documents, onRefresh }: DocumentTableProps) {
                       <button
                         onClick={() => handleReprocess(doc.id, doc.title)}
                         disabled={loadingDocId === doc.id}
-                        className="p-1.5 rounded-lg border border-white/10 bg-white/5 text-slate-300 hover:text-indigo-300 hover:bg-indigo-500/10 transition"
+                        className="p-1.5 rounded-lg border border-white/10 bg-white/5 text-slate-300 hover:text-indigo-300 hover:bg-indigo-500/10 transition active:scale-95"
                         title="Reprocess Document"
                       >
                         <RefreshCw className={`h-3.5 w-3.5 ${loadingDocId === doc.id ? "animate-spin" : ""}`} />
                       </button>
                       <button
                         onClick={() => handleDelete(doc.id, doc.title)}
-                        className="p-1.5 rounded-lg border border-red-500/20 bg-red-500/10 text-red-300 hover:bg-red-500/20 transition"
+                        className="p-1.5 rounded-lg border border-red-500/20 bg-red-500/10 text-red-300 hover:bg-red-500/20 transition active:scale-95"
                         title="Delete Document"
                       >
                         <Trash2 className="h-3.5 w-3.5" />

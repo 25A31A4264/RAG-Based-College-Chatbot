@@ -1,10 +1,4 @@
-/** @type {import('next').NextConfig} */
-const baseUrl = process.env.NEXTAUTH_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
-
 const nextConfig = {
-  env: {
-    NEXTAUTH_URL: baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },

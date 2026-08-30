@@ -54,17 +54,17 @@ export default function HistoryPage() {
 
   if (status === "unauthenticated") {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center p-6 text-center space-y-4">
+      <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 text-center space-y-4">
         <div className="p-3 rounded-2xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30">
           <MessageSquare className="h-8 w-8" />
         </div>
-        <h2 className="text-xl font-bold text-white">Sign In to View Chat History</h2>
+        <h2 className="text-lg sm:text-xl font-bold text-white">Sign In to View Chat History</h2>
         <p className="text-xs text-slate-400 max-w-sm">
           Conversation history is stored securely for registered student accounts.
         </p>
         <Link
           href="/login?callbackUrl=/history"
-          className="rounded-xl bg-indigo-600 px-5 py-2.5 text-xs font-semibold text-white hover:bg-indigo-500 transition"
+          className="rounded-xl bg-indigo-600 px-5 py-2.5 text-xs font-semibold text-white hover:bg-indigo-500 transition active:scale-95 shadow-lg shadow-indigo-600/25"
         >
           Sign In Now
         </Link>
@@ -73,20 +73,20 @@ export default function HistoryPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-8 py-8 max-w-5xl space-y-6">
-      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+    <div className="container mx-auto px-4 sm:px-8 py-6 sm:py-8 max-w-5xl space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 border-b border-white/10 pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Conversation History</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Conversation History</h1>
           <p className="text-xs text-slate-400">
             Review your past questions and answers grounded in official college documents
           </p>
         </div>
         <Link
           href="/chat"
-          className="flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-xs font-semibold text-white transition shadow-lg shadow-indigo-600/25"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-xs font-semibold text-white transition shadow-lg shadow-indigo-600/25 active:scale-95 shrink-0"
         >
           <Sparkles className="h-3.5 w-3.5" />
-          Ask New Question
+          <span>Ask New Question</span>
         </Link>
       </div>
 
@@ -95,7 +95,7 @@ export default function HistoryPage() {
           <Loader2 className="h-6 w-6 text-indigo-400 animate-spin" />
         </div>
       ) : conversations.length === 0 ? (
-        <div className="glass-panel rounded-2xl p-12 text-center space-y-4 border border-white/10">
+        <div className="glass-panel rounded-2xl p-8 sm:p-12 text-center space-y-4 border border-white/10">
           <MessageSquare className="h-10 w-10 text-slate-600 mx-auto" />
           <h3 className="text-base font-semibold text-white">No Chat History Found</h3>
           <p className="text-xs text-slate-400 max-w-md mx-auto">
@@ -103,32 +103,32 @@ export default function HistoryPage() {
           </p>
           <Link
             href="/chat"
-            className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white hover:bg-indigo-500 transition"
+            className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white hover:bg-indigo-500 transition active:scale-95"
           >
-            Go to Chatbot <ArrowRight className="h-3.5 w-3.5" />
+            <span>Go to Chatbot</span> <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           {conversations.map((conv) => (
             <Link
               key={conv.id}
               href="/chat"
-              className="glass-card rounded-2xl p-5 border border-white/10 hover:border-indigo-500/40 transition group flex flex-col justify-between"
+              className="glass-card rounded-2xl p-4 sm:p-5 border border-white/10 hover:border-indigo-500/40 transition group flex flex-col justify-between"
             >
               <div className="space-y-2">
                 <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 rounded-lg bg-indigo-600/20 text-indigo-400 border border-indigo-500/20">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="p-1.5 rounded-lg bg-indigo-600/20 text-indigo-400 border border-indigo-500/20 shrink-0">
                       <MessageSquare className="h-4 w-4" />
                     </div>
-                    <span className="font-semibold text-sm text-white group-hover:text-indigo-300 transition line-clamp-1">
+                    <span className="font-semibold text-xs sm:text-sm text-white group-hover:text-indigo-300 transition truncate">
                       {conv.title}
                     </span>
                   </div>
                   <button
                     onClick={(e) => deleteConversation(conv.id, e)}
-                    className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-red-400 transition"
+                    className="opacity-80 sm:opacity-0 sm:group-hover:opacity-100 p-1 text-slate-400 hover:text-red-400 transition shrink-0"
                     title="Delete Conversation"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -136,13 +136,13 @@ export default function HistoryPage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-4 mt-3 border-t border-white/5 text-[11px] text-slate-400">
+              <div className="flex items-center justify-between pt-3 sm:pt-4 mt-2 sm:mt-3 border-t border-white/5 text-[11px] text-slate-400">
                 <span className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
                   {formatDate(conv.updatedAt || conv.createdAt)}
                 </span>
                 <span className="text-indigo-400 font-medium group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
-                  Continue <ArrowRight className="h-3 w-3" />
+                  <span>Continue</span> <ArrowRight className="h-3 w-3" />
                 </span>
               </div>
             </Link>

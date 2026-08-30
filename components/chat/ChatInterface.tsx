@@ -13,7 +13,9 @@ import {
   GraduationCap,
   ChevronLeft,
   ChevronRight,
-  RefreshCw,
+  Menu,
+  X,
+  History,
 } from "lucide-react";
 import { MessageItem, ChatMessage } from "./MessageItem";
 import { SuggestedQuestions } from "./SuggestedQuestions";
@@ -28,9 +30,26 @@ export function ChatInterface() {
   const [conversations, setConversations] = useState<{ id: string; title: string; createdAt: string }[]>([]);
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Screen size detection
+  useEffect(() => {
+    const checkScreen = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setSidebarOpen(true);
+      } else {
+        setSidebarOpen(false);
+      }
+    };
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -61,6 +80,9 @@ export function ChatInterface() {
 
   const selectConversation = async (id: string) => {
     setActiveConvId(id);
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
     setIsLoading(true);
     try {
       const res = await fetch(`/api/conversations/${id}`);
@@ -109,6 +131,9 @@ export function ChatInterface() {
   const startNewChat = () => {
     setActiveConvId(null);
     setMessages([]);
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
   };
 
   const handleSendMessage = async (textToSend?: string) => {
@@ -174,27 +199,50 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] w-full overflow-hidden bg-background">
+    <div className="flex h-[calc(100dvh-4rem)] w-full overflow-hidden bg-background relative">
+      {/* Mobile Backdrop Overlay for Sidebar */}
+      {isMobile && sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 top-16 z-30 bg-black/60 backdrop-blur-sm md:hidden animate-fadeIn"
+        />
+      )}
+
       {/* Sidebar - Conversation History */}
       <div
-        className={`relative flex flex-col border-r border-white/10 bg-slate-950/70 transition-all duration-300 ${
-          sidebarOpen ? "w-72" : "w-0"
-        } shrink-0 overflow-hidden`}
+        className={`${
+          isMobile
+            ? `fixed inset-y-0 left-0 top-16 z-40 w-72 bg-slate-950/95 backdrop-blur-xl border-r border-white/10 shadow-2xl transition-transform duration-300 ease-in-out ${
+                sidebarOpen ? "translate-x-0" : "-translate-x-full"
+              }`
+            : `relative border-r border-white/10 bg-slate-950/70 transition-all duration-300 ease-in-out ${
+                sidebarOpen ? "w-72" : "w-0"
+              }`
+        } flex flex-col shrink-0 overflow-hidden`}
       >
-        <div className="p-4 border-b border-white/10 flex items-center justify-between">
+        <div className="p-3.5 border-b border-white/10 flex items-center justify-between gap-2">
           <button
             onClick={startNewChat}
-            className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 py-2 px-3 text-xs font-semibold text-white shadow-lg shadow-indigo-600/20 transition"
+            className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 py-2.5 px-3 text-xs font-semibold text-white shadow-lg shadow-indigo-600/20 transition active:scale-95"
           >
             <PlusCircle className="h-4 w-4" />
-            New Conversation
+            <span>New Conversation</span>
           </button>
+          {isMobile && (
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition"
+              aria-label="Close sidebar"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
         </div>
 
         {/* Conversations List */}
         <div className="flex-1 overflow-y-auto p-3 space-y-1.5">
-          <div className="px-2 py-1 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-            Past Questions
+          <div className="px-2 py-1 text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+            Past Conversations
           </div>
           {conversations.length === 0 ? (
             <div className="px-3 py-6 text-center text-xs text-slate-500">
@@ -217,7 +265,7 @@ export function ChatInterface() {
                 </div>
                 <button
                   onClick={(e) => deleteConversation(conv.id, e)}
-                  className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-red-400 transition"
+                  className="opacity-80 md:opacity-0 md:group-hover:opacity-100 p-1 text-slate-400 hover:text-red-400 transition shrink-0"
                   title="Delete"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
@@ -229,33 +277,39 @@ export function ChatInterface() {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col h-full overflow-hidden relative">
+      <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden relative">
         {/* Chat Header / Controls */}
-        <div className="h-14 border-b border-white/10 bg-slate-950/40 px-4 sm:px-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="h-14 border-b border-white/10 bg-slate-950/40 px-3 sm:px-6 flex items-center justify-between gap-2 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-1.5 rounded-lg border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 transition"
-              title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+              className="p-2 rounded-lg border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 transition shrink-0"
+              title={sidebarOpen ? "Hide sidebar" : "Show sidebar"}
             >
-              {sidebarOpen ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+              {sidebarOpen && !isMobile ? (
+                <ChevronLeft className="h-4 w-4" />
+              ) : isMobile ? (
+                <History className="h-4 w-4 text-indigo-400" />
+              ) : (
+                <ChevronRight className="h-4 w-4" />
+              )}
             </button>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-white">Campus AI Assistant</span>
-              <span className="hidden sm:inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400 border border-emerald-500/20">
+            <div className="flex items-center gap-2 truncate">
+              <span className="text-xs sm:text-sm font-semibold text-white truncate">Campus AI Assistant</span>
+              <span className="hidden sm:inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400 border border-emerald-500/20 shrink-0">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Grounded RAG Online
+                RAG Online
               </span>
             </div>
           </div>
 
           {/* Category Filter */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 shrink-0">
             <Filter className="h-3.5 w-3.5 text-slate-400 hidden sm:block" />
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="rounded-lg border border-white/10 bg-slate-900 px-2.5 py-1 text-xs text-slate-300 focus:outline-none focus:border-indigo-500"
+              className="rounded-lg border border-white/10 bg-slate-900 px-2 sm:px-2.5 py-1 text-[11px] sm:text-xs text-slate-300 focus:outline-none focus:border-indigo-500 max-w-[130px] sm:max-w-none"
             >
               {CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
@@ -267,17 +321,17 @@ export function ChatInterface() {
         </div>
 
         {/* Message Thread */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
           {messages.length === 0 ? (
-            <div className="max-w-2xl mx-auto h-full flex flex-col justify-center items-center text-center space-y-6 py-8">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white shadow-xl shadow-indigo-600/30">
-                <GraduationCap className="h-8 w-8" />
+            <div className="max-w-2xl mx-auto h-full flex flex-col justify-center items-center text-center space-y-5 py-4 sm:py-8">
+              <div className="flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white shadow-xl shadow-indigo-600/30">
+                <GraduationCap className="h-6 w-6 sm:h-8 sm:w-8" />
               </div>
-              <div className="space-y-2">
-                <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+              <div className="space-y-1.5 sm:space-y-2 px-2">
+                <h2 className="text-lg sm:text-2xl font-bold text-white tracking-tight">
                   Welcome to College AI Assistant
                 </h2>
-                <p className="text-sm text-slate-400 max-w-md mx-auto">
+                <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
                   Ask any questions regarding academic regulations, hostel policies, exams, grading, scholarships, or placements.
                 </p>
               </div>
@@ -285,17 +339,17 @@ export function ChatInterface() {
               <SuggestedQuestions onSelect={(q) => handleSendMessage(q)} />
             </div>
           ) : (
-            <div className="max-w-3xl mx-auto space-y-5">
+            <div className="max-w-3xl mx-auto space-y-4 sm:space-y-5">
               {messages.map((msg, idx) => (
                 <MessageItem key={idx} message={msg} />
               ))}
 
               {isLoading && (
-                <div className="flex items-center gap-3 justify-start">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white animate-pulse">
-                    <Loader2 className="h-5 w-5 animate-spin" />
+                <div className="flex items-center gap-2.5 sm:gap-3 justify-start">
+                  <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white animate-pulse">
+                    <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
                   </div>
-                  <div className="rounded-2xl p-4 glass-card border border-white/10 text-xs text-indigo-300 flex items-center gap-2">
+                  <div className="rounded-2xl p-3 sm:p-4 glass-card border border-white/10 text-xs text-indigo-300 flex items-center gap-2">
                     <span>Searching official documents & synthesizing answer...</span>
                   </div>
                 </div>
@@ -306,8 +360,8 @@ export function ChatInterface() {
         </div>
 
         {/* Input Bar */}
-        <div className="p-4 border-t border-white/10 bg-slate-950/60 backdrop-blur-md">
-          <div className="max-w-3xl mx-auto flex items-center gap-2.5">
+        <div className="p-3 sm:p-4 border-t border-white/10 bg-slate-950/80 backdrop-blur-md shrink-0 safe-bottom">
+          <div className="max-w-3xl mx-auto flex items-center gap-2 sm:gap-2.5">
             <div className="relative flex-1">
               <input
                 type="text"
@@ -319,23 +373,23 @@ export function ChatInterface() {
                     handleSendMessage();
                   }
                 }}
-                placeholder="Ask about attendance rules, hostel curfews, exam schedules, scholarships..."
+                placeholder="Ask about attendance, hostel, exams, fees..."
                 disabled={isLoading}
-                className="w-full rounded-xl border border-white/10 bg-slate-900/90 px-4 py-3.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 pr-10 shadow-inner"
+                className="w-full rounded-xl border border-white/10 bg-slate-900/90 px-3.5 sm:px-4 py-3 sm:py-3.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-inner"
               />
             </div>
             <button
               onClick={() => handleSendMessage()}
               disabled={isLoading || !input.trim()}
-              className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white shadow-lg shadow-indigo-600/30 transition shrink-0"
+              className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white shadow-lg shadow-indigo-600/30 transition shrink-0 active:scale-95"
               title="Send question"
             >
-              {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
+              {isLoading ? <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" /> : <Send className="h-4 w-4 sm:h-5 sm:w-5" />}
             </button>
           </div>
-          <div className="max-w-3xl mx-auto mt-2 flex items-center justify-between text-[11px] text-slate-500 px-1">
-            <span>RAG pipeline: pgvector similarity retrieval + anti-hallucination guard</span>
-            <span>Zero hallucination policy</span>
+          <div className="max-w-3xl mx-auto mt-1.5 sm:mt-2 flex items-center justify-between text-[10px] sm:text-[11px] text-slate-500 px-1">
+            <span className="truncate">RAG pgvector retrieval</span>
+            <span className="shrink-0 text-emerald-400/80">Zero hallucination policy</span>
           </div>
         </div>
       </div>

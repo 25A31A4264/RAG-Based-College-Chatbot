@@ -42,21 +42,21 @@ export function AdminDashboard() {
   }, []);
 
   return (
-    <div className="container mx-auto px-4 sm:px-8 py-8 space-y-8 max-w-7xl">
+    <div className="container mx-auto px-4 sm:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8 max-w-7xl">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
-        <div className="flex items-center gap-3.5">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white shadow-xl shadow-purple-600/30">
-            <ShieldCheck className="h-6 w-6" />
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-5 sm:pb-6">
+        <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
+          <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white shadow-xl shadow-purple-600/30 shrink-0">
+            <ShieldCheck className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
-          <div>
+          <div className="truncate">
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold text-white tracking-tight">Admin Knowledge Portal</h1>
-              <span className="rounded-full bg-purple-500/20 px-2.5 py-0.5 text-xs font-semibold text-purple-300 border border-purple-500/30">
+              <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight truncate">Admin Knowledge Portal</h1>
+              <span className="hidden sm:inline-block rounded-full bg-purple-500/20 px-2.5 py-0.5 text-xs font-semibold text-purple-300 border border-purple-500/30 shrink-0">
                 Authorized Admin
               </span>
             </div>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-400 truncate sm:whitespace-normal">
               Manage college documents, trigger RAG re-indexing, and monitor system analytics
             </p>
           </div>
@@ -65,7 +65,7 @@ export function AdminDashboard() {
         <button
           onClick={fetchDashboardData}
           disabled={isLoading}
-          className="flex items-center gap-2 rounded-xl border border-white/10 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-slate-900 px-4 py-2.5 sm:py-2 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition active:scale-95 shrink-0"
         >
           <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
           <span>Refresh Data</span>

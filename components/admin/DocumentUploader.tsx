@@ -84,13 +84,13 @@ export function DocumentUploader({ onSuccess }: DocumentUploaderProps) {
   };
 
   return (
-    <div className="glass-panel rounded-2xl p-6 border border-white/10 space-y-5">
+    <div className="glass-panel rounded-2xl p-4 sm:p-6 border border-white/10 space-y-4 sm:space-y-5">
       <div className="flex items-center gap-3">
-        <div className="p-2.5 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30">
-          <FileUp className="h-5 w-5" />
+        <div className="p-2 sm:p-2.5 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30">
+          <FileUp className="h-4 w-4 sm:h-5 sm:w-5" />
         </div>
         <div>
-          <h3 className="text-base font-bold text-white">Upload College Document</h3>
+          <h3 className="text-sm sm:text-base font-bold text-white">Upload College Document</h3>
           <p className="text-xs text-slate-400">
             Ingest PDF, DOCX, TXT, or Markdown documents into the pgvector knowledge base
           </p>
@@ -107,7 +107,7 @@ export function DocumentUploader({ onSuccess }: DocumentUploaderProps) {
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleFileDrop}
           onClick={() => fileInputRef.current?.click()}
-          className={`flex flex-col items-center justify-center p-8 rounded-2xl border-2 border-dashed cursor-pointer transition ${
+          className={`flex flex-col items-center justify-center p-5 sm:p-8 rounded-2xl border-2 border-dashed cursor-pointer transition active:scale-[0.99] ${
             isDragging
               ? "border-purple-500 bg-purple-500/10"
               : file
@@ -123,31 +123,31 @@ export function DocumentUploader({ onSuccess }: DocumentUploaderProps) {
             className="hidden"
           />
 
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30 mb-3">
-            <Upload className="h-6 w-6" />
+          <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30 mb-2 sm:mb-3">
+            <Upload className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
 
           {file ? (
             <div className="text-center space-y-1">
-              <p className="text-sm font-semibold text-emerald-300">{file.name}</p>
-              <p className="text-xs text-slate-400">
-                {(file.size / 1024 / 1024).toFixed(2)} MB • Click to change file
+              <p className="text-xs sm:text-sm font-semibold text-emerald-300 break-all">{file.name}</p>
+              <p className="text-[11px] sm:text-xs text-slate-400">
+                {(file.size / 1024 / 1024).toFixed(2)} MB • Tap to change file
               </p>
             </div>
           ) : (
             <div className="text-center space-y-1">
-              <p className="text-sm font-medium text-slate-200">
-                Click to browse or drag and drop college document
+              <p className="text-xs sm:text-sm font-medium text-slate-200">
+                Tap to browse or drop college document
               </p>
-              <p className="text-xs text-slate-400">
-                Supports PDF, Word (.docx), Plain Text (.txt), and Markdown (.md) up to 15MB
+              <p className="text-[10px] sm:text-xs text-slate-400">
+                Supports PDF, Word (.docx), TXT, Markdown up to 15MB
               </p>
             </div>
           )}
         </div>
 
         {/* Metadata Controls */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1.5">
               Document Display Title
@@ -157,7 +157,7 @@ export function DocumentUploader({ onSuccess }: DocumentUploaderProps) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g., Academic Regulations 2026"
-              className="w-full rounded-xl border border-white/10 bg-slate-900 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-purple-500 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-slate-900 px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:border-purple-500 focus:outline-none"
             />
           </div>
 
@@ -168,7 +168,7 @@ export function DocumentUploader({ onSuccess }: DocumentUploaderProps) {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-slate-900 px-3.5 py-2.5 text-xs text-white focus:border-purple-500 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-slate-900 px-3.5 py-2.5 text-xs sm:text-sm text-white focus:border-purple-500 focus:outline-none"
             >
               {CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
@@ -182,7 +182,7 @@ export function DocumentUploader({ onSuccess }: DocumentUploaderProps) {
         {/* Feedback message */}
         {message && (
           <div
-            className={`p-3.5 rounded-xl border text-xs flex items-center gap-2.5 ${
+            className={`p-3 sm:p-3.5 rounded-xl border text-xs flex items-center gap-2.5 ${
               message.type === "success"
                 ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
                 : "bg-red-500/10 border-red-500/30 text-red-300"
@@ -193,7 +193,7 @@ export function DocumentUploader({ onSuccess }: DocumentUploaderProps) {
             ) : (
               <AlertCircle className="h-4 w-4 shrink-0" />
             )}
-            <span>{message.text}</span>
+            <span className="break-all">{message.text}</span>
           </div>
         )}
 
@@ -202,12 +202,12 @@ export function DocumentUploader({ onSuccess }: DocumentUploaderProps) {
           <button
             type="submit"
             disabled={!file || isUploading}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:opacity-50 px-5 py-2.5 text-xs font-semibold text-white shadow-lg shadow-purple-600/25 transition"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:opacity-50 px-5 py-3 sm:py-2.5 text-xs sm:text-sm font-semibold text-white shadow-lg shadow-purple-600/25 transition active:scale-95"
           >
             {isUploading ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Extracting, Chunking & Generating Embeddings...</span>
+                <span>Processing & Generating Embeddings...</span>
               </>
             ) : (
               <>
