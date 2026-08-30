@@ -172,17 +172,7 @@ async function main() {
         },
       });
 
-      // Update pgvector raw column if PostgreSQL pgvector extension is available
-      try {
-        const vectorStr = `[${embedding.join(",")}]`;
-        await prisma.$executeRawUnsafe(`
-          UPDATE document_chunks 
-          SET embedding = '${vectorStr}'::vector 
-          WHERE id = '${chunkRecord.id}';
-        `);
-      } catch {
-        // Fallback gracefully if pgvector extension is being initialized
-      }
+
     }
 
     // Update document metadata

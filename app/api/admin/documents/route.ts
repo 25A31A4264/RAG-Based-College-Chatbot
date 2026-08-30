@@ -115,17 +115,7 @@ export async function POST(req: NextRequest) {
           },
         });
 
-        // Update pgvector column if available
-        try {
-          const vectorStr = `[${embedding.join(",")}]`;
-          await prisma.$executeRawUnsafe(`
-            UPDATE document_chunks 
-            SET embedding = '${vectorStr}'::vector 
-            WHERE id = '${createdChunk.id}';
-          `);
-        } catch {
-          // pgvector raw column update optional fallback
-        }
+
       }
 
       // 6. Mark document READY

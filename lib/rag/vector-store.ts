@@ -27,11 +27,10 @@ export async function searchSimilarChunks(
 
   const isPostgres = process.env.DATABASE_URL?.startsWith("postgres");
 
-  // 1. Try PostgreSQL native pgvector cosine distance query if running PostgreSQL
-  if (isPostgres) {
+  if (isPostgres && typeof (prisma as any).$queryRawUnsafe === "function") {
     try {
       const embeddingStr = `[${params.queryEmbedding.join(",")}]`;
-      const rawResults: any[] = await prisma.$queryRawUnsafe(`
+      const rawResults: any[] = await (prisma as any).$queryRawUnsafe(`
         SELECT 
           dc.id,
           dc."documentId",

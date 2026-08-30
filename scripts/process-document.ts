@@ -56,16 +56,7 @@ async function processFileCli() {
       },
     });
 
-    try {
-      const vectorStr = `[${embedding.join(",")}]`;
-      await prisma.$executeRawUnsafe(`
-        UPDATE document_chunks 
-        SET embedding = '${vectorStr}'::vector 
-        WHERE id = '${chunkRecord.id}';
-      `);
-    } catch {
-      // ignore
-    }
+
   }
 
   await prisma.document.update({
