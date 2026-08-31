@@ -6,15 +6,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-env:
-  DATABASE_URL: "mongodb+srv://venkatvantakula45_db_user:QtTjfBpdEvQZSPHM@chatbot.uht7czj.mongodb.net/college_rag?retryWrites=true&w=majority&appName=Chatbot"
-  NEXTAUTH_SECRET: "super-secret-production-nextauth-key-32-chars-min-12345"
-  NEXTAUTH_URL: "http://localhost:3000"
-  AUTH_SECRET: "super-secret-production-nextauth-key-32-chars-min-12345"
-  LLM_PROVIDER: "local"
-  EMBEDDING_PROVIDER: "local"
-  NODE_ENV: "production"
-
 jobs:
   build:
     name: Build & Test Next.js App
@@ -28,16 +19,27 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
 
       - name: Generate Prisma Client
-        run: node scripts/prisma-generate.mjs
-
-      - name: Build Next.js Application
-        run: npm run build
+        run: npx prisma generate
+        env:
+          DATABASE_URL: "mongodb+srv://venkatvantakula45_db_user:QtTjfBpdEvQZSPHM@chatbot.uht7czj.mongodb.net/college_rag?retryWrites=true&w=majority&appName=Chatbot"
 
       - name: Run Tests
         run: npm test
+        env:
+          DATABASE_URL: "mongodb+srv://venkatvantakula45_db_user:QtTjfBpdEvQZSPHM@chatbot.uht7czj.mongodb.net/college_rag?retryWrites=true&w=majority&appName=Chatbot"
+          NEXTAUTH_SECRET: "super-secret-production-nextauth-key-32-chars-min-12345"
+
+      - name: Build Next.js Application
+        run: npm run build
+        env:
+          DATABASE_URL: "mongodb+srv://venkatvantakula45_db_user:QtTjfBpdEvQZSPHM@chatbot.uht7czj.mongodb.net/college_rag?retryWrites=true&w=majority&appName=Chatbot"
+          NEXTAUTH_SECRET: "super-secret-production-nextauth-key-32-chars-min-12345"
+          NEXTAUTH_URL: "https://localhost:3000"
+          AUTH_SECRET: "super-secret-production-nextauth-key-32-chars-min-12345"
+          LLM_PROVIDER: "local"
+          EMBEDDING_PROVIDER: "local"
