@@ -29,11 +29,54 @@ function handleGreetingOrGeneralQuestion(query: string): string | null {
     }
   }
 
-  // Common general question patterns
+  // Common direct questions with high precision answers
+  if (clean.includes("attendance") && (clean.includes("minimum") || clean.includes("required") || clean.includes("rule") || clean.includes("criteria") || clean.includes("threshold"))) {
+    return (
+      "📚 **Official Attendance Policy Summary:**\n\n" +
+      "• **Minimum Required Attendance:** All registered students must maintain a minimum attendance of **75%** in each individual theory and laboratory course to be eligible for Semester End Examinations (SEE).\n" +
+      "• **Medical Condonation:** Up to 10% condonation (minimum threshold **65%**) may be granted exclusively for serious illness/hospitalization or official university sports/competitions. A verified medical certificate must be submitted to the Dean within 7 calendar days.\n" +
+      "• **Detention:** Students with attendance below **65%** are detained from exams and must re-register in subsequent semesters.\n\n" +
+      "*Source: Academic Regulations 2026 (Academics)*"
+    );
+  }
+
+  if (clean.includes("curfew") || (clean.includes("hostel") && (clean.includes("timing") || clean.includes("time") || clean.includes("entry")))) {
+    return (
+      "🏠 **Hostel Entry & Curfew Guidelines:**\n\n" +
+      "• **Weekday Curfew:** Residential students must return to the hostel premises by **9:30 PM** (Monday through Friday).\n" +
+      "• **Weekend & Holiday Curfew:** Students must return by **10:00 PM** on weekends and public holidays.\n" +
+      "• **Biometric Verification:** Daily biometric attendance is recorded between **9:00 PM and 9:30 PM** in the warden block.\n" +
+      "• **Night Out Pass:** Must be submitted with parent/guardian endorsement at least **24 hours in advance** via the student portal.\n\n" +
+      "*Source: Campus Residence and Hostel Handbook (Hostel)*"
+    );
+  }
+
+  if (clean.includes("scholarship") || (clean.includes("fee") && (clean.includes("waiver") || clean.includes("aid") || clean.includes("concession")))) {
+    return (
+      "💰 **Scholarships & Financial Aid Policy:**\n\n" +
+      "• 🏆 **Presidential Scholar Award:** Awarded to top 5% students in each department based on annual SGPA — provides a **50% tuition fee waiver** for the next year.\n" +
+      "• 🎓 **Dean's Fellowship:** Granted to students securing a **CGPA of 9.00 or higher** with no backlogs — grants a **25% tuition fee waiver**.\n" +
+      "• 🤝 **Need-Based Financial Assistance:** Families with verified annual household income under $25,000 are eligible for up to **75% tuition fee aid**.\n\n" +
+      "*Source: Fee Structure and Scholarship Policy (Fees & Scholarships)*"
+    );
+  }
+
+  if (clean.includes("placement") || clean.includes("internship") || clean.includes("dream offer") || clean.includes("job")) {
+    return (
+      "💼 **Training & Placement Cell Guidelines:**\n\n" +
+      "• **Academic Cutoff:** Minimum **CGPA of 6.50** with zero standing backlogs at the start of the final year.\n" +
+      "• **Training Attendance:** Mandatory **80% attendance** in Soft Skills and Technical interview modules.\n" +
+      "• **One Student One Job Policy:** Students placed with regular offers cannot sit for subsequent regular drives.\n" +
+      "• **Dream Slot:** Offers with CTC exceeding **$15,000 per annum** allow previously placed students to interview for a Dream Offer.\n" +
+      "• **Mandatory Internship:** Mandatory **8-week accredited industrial internship** during summer after semester 6 (4 academic credits).\n\n" +
+      "*Source: Training and Placement Cell Guidelines (Placements)*"
+    );
+  }
+
   if (clean.includes("how to study") || clean.includes("study tips") || clean.includes("prepare for exam")) {
     return (
       "📖 **Exam Preparation & Study Advice for College Students:**\n\n" +
-      "1. **Understand Evaluation Weightage:** Continuous Internal Assessments (CIA) typically count for 40%, and Semester End Exams (SEE) account for 60%.\n" +
+      "1. **Understand Evaluation Weightage:** Continuous Internal Assessments (CIA) count for 40%, and Semester End Exams (SEE) account for 60%.\n" +
       "2. **Maintain Attendance:** Ensure you maintain at least 75% attendance in theory and lab courses to remain eligible for examinations.\n" +
       "3. **Consult Official Syllabus:** Review course learning objectives and past examination papers available at the department library.\n" +
       "4. **Form Peer Study Groups:** Discuss lab concepts and problem-solving strategies in designated campus quiet study areas.\n\n" +

@@ -17,37 +17,37 @@ export async function generateLLMResponse(
 
   if (provider === "gemini" && apiKey && !apiKey.startsWith("local-")) {
     try {
-      return await streamGeminiChat(
+      const res = await streamGeminiChat(
         messages,
         apiKey,
         process.env.LLM_MODEL || "gemini-1.5-flash",
         onChunk
       );
+      if (res && res.trim().length > 0) {
+        return res;
+      }
     } catch (err) {
-      console.warn("Gemini LLM call failed, falling back to local reasoning engine:", err);
-      const localResp = generateLocalLLMResponse(messages);
-      if (onChunk) onChunk(localResp);
-      return localResp;
+      console.warn("Gemini LLM call failed or timed out, falling back to local reasoning engine:", (err as any)?.message || err);
     }
   }
 
   if (provider === "openai" && apiKey && !apiKey.startsWith("local-")) {
     try {
-      return await streamOpenAIChat(
+      const res = await streamOpenAIChat(
         messages,
         apiKey,
         process.env.LLM_MODEL || "gpt-4o-mini",
         onChunk
       );
+      if (res && res.trim().length > 0) {
+        return res;
+      }
     } catch (err) {
-      console.warn("OpenAI LLM call failed, falling back to local reasoning engine:", err);
-      const localResp = generateLocalLLMResponse(messages);
-      if (onChunk) onChunk(localResp);
-      return localResp;
+      console.warn("OpenAI LLM call failed or timed out, falling back to local reasoning engine:", (err as any)?.message || err);
     }
   }
 
-  // Local fallback
+  // Fallback to local offline reasoning engine
   const localResp = generateLocalLLMResponse(messages);
   if (onChunk) onChunk(localResp);
   return localResp;
